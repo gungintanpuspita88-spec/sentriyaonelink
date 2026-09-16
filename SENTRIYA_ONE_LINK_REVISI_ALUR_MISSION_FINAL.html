@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#047857">
+<title>SENTRIYA ONE LINK — LMS Siswa & Mode Guru</title>
+<style>
+:root{
+  --blue:#0284c7;--blue2:#075985;--green:#059669;--green2:#047857;
+  --soft:#ecfdf5;--sky:#e0f2fe;--ink:#17324d;--muted:#64748b;
+  --line:#d9ece9;--white:#fff;--danger:#dc2626;--yellow:#facc15;
+  --shadow:0 12px 32px rgba(15,118,110,.12);--radius:20px
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);
+  background:linear-gradient(135deg,#f8fffe,#ecfeff);min-height:100vh
+}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer;border:0;transition:.18s}
+button:hover{transform:translateY(-1px)}
+.hidden{display:none!important}
+.app{max-width:1500px;margin:auto;min-height:100vh}
+.topbar{
+  position:sticky;top:0;z-index:50;background:#fffffff2;backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);padding:10px 16px;display:flex;gap:12px;align-items:center
+}
+.brand{display:flex;align-items:center;gap:10px;flex:1}
+.logo{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--blue),var(--green));color:#fff;font-size:25px}
+.brand b{display:block}.brand small{color:var(--muted)}
+.toolbar{display:flex;gap:7px;align-items:center}
+.iconbtn{height:44px;min-width:44px;padding:0 11px;border-radius:13px;background:#f0fdfa;color:var(--green2);font-weight:800}
+.mode-chip{padding:8px 11px;border-radius:999px;background:var(--sky);color:var(--blue2);font-weight:800;font-size:12px}
+main{padding:24px 22px 80px}
+.page{display:none}.page.active{display:block}
+.hero{
+  min-height:420px;border-radius:28px;padding:38px;color:white;
+  background:linear-gradient(135deg,#0369a1,#0f766e 58%,#059669);
+  box-shadow:var(--shadow);display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center
+}
+.hero h1{font-size:clamp(36px,6vw,70px);line-height:.95;margin:0}
+.hero h2{color:#fef08a;margin:12px 0;font-size:clamp(22px,3vw,34px)}
+.hero p{font-size:18px;line-height:1.6}
+.hero-art{font-size:110px;text-align:center;filter:drop-shadow(0 18px 20px #0003)}
+.btn{min-height:46px;padding:11px 16px;border-radius:14px;background:var(--green);color:#fff;font-weight:800}
+.btn.blue{background:var(--blue)}.btn.yellow{background:var(--yellow);color:#4a3900}
+.btn.light{background:white;color:var(--blue2)}.btn.danger{background:#fee2e2;color:#991b1b}
+.btn.soft{background:var(--soft);color:var(--green2)}.btn.purple{background:#7c3aed}
+.btnrow{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+.card{
+  background:white;border:1px solid var(--line);border-radius:var(--radius);
+  padding:18px;box-shadow:0 7px 22px rgba(15,118,110,.07)
+}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.section-title{font-size:clamp(28px,4vw,44px);color:var(--blue2);margin:0 0 8px}
+.lead{color:var(--muted);line-height:1.6;margin:0 0 20px}
+.eyebrow{display:inline-block;background:var(--soft);color:var(--green2);font-size:12px;font-weight:900;padding:7px 10px;border-radius:999px;margin-bottom:10px}
+.progress{height:12px;border-radius:999px;background:#e2e8f0;overflow:hidden}
+.progress>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--blue));transition:.25s}
+.missions{display:grid;gap:12px}
+.mission{display:grid;grid-template-columns:58px 1fr auto;gap:13px;align-items:center;padding:15px;border:1px solid var(--line);border-radius:18px;background:white}
+.micon{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,var(--sky),var(--soft));font-size:28px}
+.mission h3{margin:0;color:var(--blue2)}.mission p{margin:4px 0;color:var(--muted);font-size:13px}
+.status{font-size:11px;font-weight:900;padding:5px 8px;border-radius:999px;background:#f1f5f9;color:#475569}
+.mission.done{background:#f0fdf4;border-color:#86efac}.mission.done .status{background:#dcfce7;color:#166534}
+label.field{display:block;font-weight:800;margin:12px 0 5px;font-size:13px}
+input[type=text],input[type=password],input[type=number],textarea,select{
+  width:100%;padding:10px 11px;border:1.5px solid #cbd5e1;border-radius:12px;background:#fff;color:#0f172a
+}
+textarea{min-height:85px;resize:vertical;line-height:1.45}
+.option{display:flex;gap:8px;align-items:flex-start;padding:10px;border:1px solid #e2e8f0;border-radius:12px;margin:7px 0;background:#fff}
+.option input{margin-top:3px;accent-color:var(--green)}
+.activity{margin-top:16px}
+.activity h2{margin-top:0;color:var(--blue2)}
+.info{padding:12px 14px;border-left:5px solid var(--blue);background:#eff6ff;border-radius:12px;line-height:1.5}
+.info.green{border-color:var(--green);background:#ecfdf5}.info.yellow{border-color:#eab308;background:#fffbeb}
+.score{font-size:52px;font-weight:900;color:var(--green2)}
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px;border-bottom:1px solid #e6efed;text-align:left;vertical-align:top}
+th{background:#e6fffa;color:#065f46}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:16px;background:white}
+.login-shell{min-height:calc(100vh - 80px);display:grid;place-items:center;padding:20px}
+.login-card{width:min(560px,100%);background:white;border:1px solid var(--line);border-radius:25px;padding:24px;box-shadow:var(--shadow)}
+.mode-choice{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}
+.mode-choice button{padding:22px 12px;border-radius:18px;font-weight:900;font-size:18px}
+.student-choice{background:linear-gradient(135deg,#dbeafe,#e0f2fe);color:#075985}
+.teacher-choice{background:linear-gradient(135deg,#d1fae5,#ecfdf5);color:#047857}
+.studentbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.studentbar .who{flex:1;background:white;border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.teacher-head{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:15px}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.stat{background:white;border:1px solid var(--line);border-radius:16px;padding:14px}
+.stat strong{display:block;font-size:30px;color:var(--green2)}
+.teacher-table button{padding:7px 10px;border-radius:10px;background:var(--blue);color:white;font-weight:800}
+.pill{display:inline-block;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:900;background:#e2e8f0}
+.pill.done{background:#dcfce7;color:#166534}
+.modal{position:fixed;inset:0;z-index:200;background:#0f172bb8;display:none;place-items:center;padding:18px}
+.modal.show{display:grid}
+.modalbox{width:min(900px,100%);max-height:90vh;overflow:auto;background:white;border-radius:22px;padding:20px}
+.detail-answer{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:10px;white-space:pre-wrap;word-break:break-word}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,100px);opacity:0;z-index:300;background:#064e3b;color:white;font-weight:800;padding:12px 17px;border-radius:14px;transition:.25s}
+.toast.show{transform:translate(-50%,0);opacity:1}
+.footer-nav{display:flex;justify-content:space-between;gap:10px;margin-top:22px}
+.day-row.done{background:#ecfdf5}
+.tiny{font-size:12px;color:var(--muted)}
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr}.hero-art{display:none}.grid,.grid.two{grid-template-columns:1fr 1fr}.stat-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:620px){
+  main{padding:18px 12px 70px}.brand small{display:none}.mode-chip{display:none}
+  .hero{padding:25px 20px}.grid,.grid.two,.stat-grid,.mode-choice{grid-template-columns:1fr}
+  .mission{grid-template-columns:52px 1fr}.mission .btn{grid-column:1/-1}
+}
+
+    /* ASESMEN HOTS AKHIR PERTEMUAN */
+    .assessment-card{
+      border:2px solid #bae6fd;
+      background:linear-gradient(180deg,#ffffff,#f8fdff);
+    }
+    .assessment-head{
+      display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .assessment-head h2{margin:0;color:#075985}
+    .assessment-badge{
+      display:inline-block;padding:6px 10px;border-radius:999px;background:#ede9fe;
+      color:#6d28d9;font-size:11px;font-weight:900
+    }
+    .assessment-question{
+      padding:15px;margin:12px 0;border:1px solid #dbeafe;border-radius:16px;background:white
+    }
+    .assessment-question h4{margin:0 0 10px;color:#17324d;line-height:1.5}
+    .qtype{
+      display:inline-block;margin-bottom:7px;padding:5px 8px;border-radius:999px;
+      background:#ecfdf5;color:#047857;font-size:10px;font-weight:900
+    }
+    .match-grid{display:grid;gap:9px}
+    .match-row{
+      display:grid;grid-template-columns:minmax(130px,.8fr) 34px minmax(180px,1.2fr);
+      gap:8px;align-items:center
+    }
+    .match-row select{margin:0}
+    .assessment-result{
+      margin-top:15px;padding:18px;border-radius:18px;text-align:center;
+      background:linear-gradient(135deg,#d1fae5,#e0f2fe);border:1px solid #9fdfd2
+    }
+    .assessment-score{font-size:48px;font-weight:900;color:#047857}
+    .assessment-scores{
+      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px
+    }
+    .assessment-score-box{
+      border:1px solid #dbeafe;border-radius:14px;padding:13px;text-align:center;background:#fff
+    }
+    .assessment-score-box b{display:block;font-size:28px;color:#075985;margin-top:4px}
+    @media(max-width:720px){
+      .match-row{grid-template-columns:1fr}
+      .match-row .arrow{display:none}
+      .assessment-scores{grid-template-columns:1fr}
+    }
+
+
+.source-card{
+  background:linear-gradient(135deg,#eff6ff,#ecfdf5);
+  border:1px solid #bfdbfe;
+  border-radius:18px;
+  padding:18px;
+  margin:18px 0;
+}
+.source-card h3{color:#075985;margin-bottom:8px}
+.source-link{
+  display:inline-block;
+  padding:10px 14px;
+  border-radius:12px;
+  background:#0284c7;
+  color:white;
+  text-decoration:none;
+  font-weight:800;
+  margin-top:10px;
+}
+.source-link.green{background:#059669}
+.source-done{
+  margin-top:12px;
+  padding:10px;
+  border-radius:12px;
+  background:white;
+  border:1px solid #d1fae5;
+}
+
+
+.climate-card{
+ background:linear-gradient(135deg,#ecfeff,#f0fdf4);
+ border:1px solid #a7f3d0;
+ border-radius:18px;
+ padding:20px;
+ margin:18px 0;
+}
+.climate-news{
+ background:#fff;
+ border-left:6px solid #0284c7;
+ padding:16px;
+ border-radius:14px;
+ line-height:1.7;
+}
+.analysis-box{
+ background:#f8fafc;
+ border:1px solid #cbd5e1;
+ border-radius:14px;
+ padding:15px;
+ margin-top:12px;
+}
+.analysis-box textarea{
+ margin-top:8px;
+}
+.tag-climate{
+ display:inline-block;
+ background:#dcfce7;
+ color:#166534;
+ padding:5px 10px;
+ border-radius:999px;
+ font-size:.8rem;
+ font-weight:800;
+}
+
+.learning-guide{
+  background:linear-gradient(135deg,#ecfdf5,#eff6ff);
+  border:1px solid #bfdbfe;
+  border-radius:22px;
+  padding:22px;
+  margin:20px 0;
+}
+.learning-guide h2{
+  color:#075985;
+  margin-bottom:12px;
+}
+.learning-guide li{
+  margin:8px 0;
+  line-height:1.5;
+}
+.feedback-card{
+  background:#fff;
+  border-left:6px solid #059669;
+  padding:16px;
+  border-radius:14px;
+  margin:12px 0;
+}
+.feedback-level{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:999px;
+  font-weight:800;
+  margin-bottom:8px;
+}
+.feedback-good{background:#dcfce7;color:#166534}
+.feedback-medium{background:#fef3c7;color:#92400e}
+.feedback-improve{background:#fee2e2;color:#991b1b}
+
+
+.mission-flow{
+ background:linear-gradient(135deg,#f0fdf4,#eff6ff);
+ border:1px solid #bfdbfe;
+ border-radius:22px;
+ padding:20px;
+ margin:18px 0;
+}
+.mission-flow h3{color:#075985}
+.timeline-step{
+ display:flex;gap:12px;padding:12px 0;border-bottom:1px dashed #cbd5e1;
+}
+.timeline-step:last-child{border-bottom:0}
+.step-number{
+ min-width:34px;height:34px;border-radius:50%;
+ background:#059669;color:white;font-weight:900;
+ display:flex;align-items:center;justify-content:center;
+}
+.big-question{
+ background:#075985;color:white;padding:18px;border-radius:18px;
+ font-size:18px;font-weight:800;
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">🌍</div>
+      <div><b>SENTRIYA ONE LINK</b><small>Eco-Resilient Explorer • Kelas V</small></div>
+    </div>
+    <span class="mode-chip" id="modeChip">Pilih mode</span>
+    <div class="toolbar">
+      <button class="iconbtn" id="speakBtn" title="Bacakan">🔊</button>
+      <button class="iconbtn" id="homeBtn" title="Beranda">🏠</button>
+      <button class="iconbtn" id="fullscreenBtn" title="Layar penuh">⛶</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- PILIH MODE -->
+    <section class="page active" id="page-mode">
+      <div class="login-shell">
+        <div class="login-card">
+          <div class="eyebrow">🌍 SENTRIYA ONE LINK</div>
+          <h1 class="section-title">Pilih Mode</h1>
+          <p class="lead">Siswa mengerjakan aktivitas belajar. Guru melihat hasil yang tersimpan di LMS ini.</p>
+
+          <div class="mode-choice">
+            <button class="student-choice" id="studentModeBtn">🧑‍🎓<br>MODE SISWA</button>
+            <button class="teacher-choice" id="teacherModeBtn">👩‍🏫<br>MODE GURU</button>
+          </div>
+
+          <div class="info yellow" style="margin-top:18px">
+            <b>Catatan:</b> versi sederhana ini menyimpan data di browser perangkat yang sama.
+            Jadi Mode Guru menampilkan siswa yang pernah mengerjakan LMS pada perangkat/browser ini.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOGIN SISWA -->
+    <section class="page" id="page-student-login">
+      <div class="login-shell">
+        <div class="login-card">
+          <span class="eyebrow">🧑‍🎓 MODE SISWA</span>
+          <h1 class="section-title">Masuk sebagai Siswa</h1>
+          <p class="lead">Isi nama dan kelas. Hasil belajarmu akan disimpan otomatis.</p>
+
+          <label class="field">Nama lengkap *</label>
+          <input id="studentName" type="text" placeholder="Contoh: Komang Ayu">
+
+          <label class="field">Kelas *</label>
+          <input id="studentClass" type="text" value="V" placeholder="Contoh: V A">
+
+          <label class="field">Kelompok</label>
+          <input id="studentGroup" type="text" placeholder="Contoh: Kelompok Matahari">
+
+          <div class="btnrow">
+            <button class="btn blue" id="enterStudentBtn">🚀 Mulai Belajar</button>
+            <button class="btn soft" data-page="mode">← Kembali</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOGIN GURU -->
+    <section class="page" id="page-teacher-login">
+      <div class="login-shell">
+        <div class="login-card">
+          <span class="eyebrow">👩‍🏫 MODE GURU</span>
+          <h1 class="section-title">Masukkan Kode Guru</h1>
+          <p class="lead">Hanya guru yang mengetahui kode dapat membuka dashboard hasil siswa.</p>
+
+          <label class="field">Kode / Password Guru</label>
+          <input id="teacherPassword" type="password" placeholder="Masukkan kode guru">
+
+          <div class="btnrow">
+            <button class="btn" id="enterTeacherBtn">🔐 Buka Dashboard Guru</button>
+            <button class="btn soft" data-page="mode">← Kembali</button>
+          </div>
+
+          <p class="tiny" style="margin-top:12px">Kode awal pada file ini: <b>2468</b>. Guru dapat menggantinya pada bagian JavaScript.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOME SISWA -->
+    <section class="page" id="page-home">
+      <div class="studentbar">
+        <div class="who">🧑‍🎓 <b id="studentDisplayName">Siswa</b> • <span id="studentDisplayClass">Kelas V</span> • <span id="studentDisplayGroup">-</span></div>
+        <button class="btn soft" id="switchStudentBtn">Ganti Siswa</button>
+        <button class="btn danger" id="studentLogoutBtn">Keluar</button>
+      </div>
+
+      <div class="hero">
+        <div>
+          <div class="eyebrow" style="background:#ffffff25;color:white">PETUALANGAN BELAJAR</div>
+          <h1>SENTRIYA<br>ONE LINK</h1>
+          <h2>ECO-RESILIENT EXPLORER</h2>
+          <p>Energi, air, perubahan iklim, mitigasi bencana, data, dan solusi STEM dalam satu petualangan belajar.</p>
+          <div class="btnrow">
+            <button class="btn yellow" data-page="missions">🧭 LIHAT PETA MISI</button>
+            <button class="btn light" data-page="results">📊 HASIL SAYA</button>
+          </div>
+        </div>
+        <div class="hero-art">☀️🌍💧🌱</div>
+      </div>
+
+      <div class="card" style="margin-top:18px">
+        <div style="display:flex;justify-content:space-between;gap:10px">
+          <b>Progress Belajarku</b><b id="homeProgressText">0%</b>
+        </div>
+        <div class="progress" style="margin-top:8px"><i id="homeProgress"></i></div>
+      </div>
+    </section>
+
+    <!-- MISI -->
+    
+<div class="mission-flow">
+<h3>🗺️ Peta Petualangan SENTRIYA</h3>
+<p>Ikuti misi secara berurutan: Discover → Investigate → Data → Disaster → STEM → Test → Pitch → Reflection.</p>
+</div>
+<section class="page" id="page-missions">
+      <div class="eyebrow">🧭 PETA MISI</div>
+      <h1 class="section-title">Petualangan 7 Misi</h1>
+      <p class="lead">Selesaikan aktivitas dan simpan hasil pada setiap misi.</p>
+
+      <div class="missions">
+        <div class="mission" data-mission-card="m1">
+          <div class="micon">🌍</div><div><h3>Misi 1 — Energi</h3><p>Mengenal energi dan hemat energi.</p><span class="status">Belum selesai</span></div>
+          <button class="btn blue" data-page="m1">Mulai</button>
+        </div>
+        <div class="mission" data-mission-card="m2">
+          <div class="micon">💧</div><div><h3>Misi 2 — Siklus Air</h3><p>Mengamati perubahan air dan siklus air.</p><span class="status">Belum selesai</span></div>
+          <button class="btn blue" data-page="m2">Mulai</button>
+        </div>
+        <div class="mission" data-mission-card="m3">
+          <div class="micon">☀️</div><div><h3>Misi 3 — Solar Car</h3><p>Menghubungkan cahaya, panel surya, dan gerak.</p><span class="status">Belum selesai</span></div>
+          <button class="btn blue" data-page="m3">Mulai</button>
+        </div>
+        <div class="mission" data-mission-card="m4">
+          <div class="micon">📊</div><div><h3>Misi 4 — Eco Data Detective</h3><p>Mencatat data energi dan air.</p><span class="status">Belum selesai</span></div>
+          <button class="btn blue" data-page="m4">Mulai</button>
+        </div>
+        <div class="mission" data-mission-card="m5">
+          <div class="micon">🚀</div><div><h3>Misi 5 — STEM Solution</h3><p>Merancang solusi lingkungan.</p><span class="status">Belum selesai</span></div>
+          <button class="btn blue" data-page="m5">Mulai</button>
+        </div>
+        <div class="mission" data-mission-card="m6">
+          <div class="micon">🎤</div><div><h3>Misi 6 — Presentasi</h3><p>Menyampaikan bukti dan solusi.</p><span class="status">Belum selesai</span></div>
+          <button class="btn blue" data-page="m6">Mulai</button>
+        </div>
+        <div class="mission" data-mission-card="m7">
+          <div class="micon">🌱</div><div><h3>Misi 7 — Refleksi & Aksi</h3><p>Refleksi dan aksi nyata.</p><span class="status">Belum selesai</span></div>
+          <button class="btn blue" data-page="m7">Mulai</button>
+        </div>
+      </div>
+
+      <div class="footer-nav"><button class="btn soft" data-page="home">← Beranda</button><button class="btn blue" data-page="m1">Mulai Misi 1 →</button></div>
+    </section>
+
+    <!-- M1 -->
+    <section class="page" id="page-m1">
+      <span class="eyebrow">MISI 1</span>
+      <h1 class="section-title">🌍 Dari Energi ke Lingkungan</h1>
+      <p class="lead">Kenali sumber energi dan kebiasaan hemat energi.</p>
+
+      <div class="grid">
+        <div class="card"><div style="font-size:45px">☀️</div><h3>Matahari</h3><p>Energi terbarukan dari cahaya matahari.</p></div>
+        <div class="card"><div style="font-size:45px">💧</div><h3>Air</h3><p>Aliran air dapat dimanfaatkan sebagai energi.</p></div>
+        <div class="card"><div style="font-size:45px">⛽</div><h3>Fosil</h3><p>Sumber energi terbatas dan tidak terbarukan.</p></div>
+      </div>
+
+      <div class="card activity">
+        <h2>📝 Pertanyaan Penyelidikanku</h2>
+        <label class="field">Masalah yang saya temukan</label>
+        <textarea data-key="m1_problem"></textarea>
+        <label class="field">Pertanyaan penyelidikan</label>
+        <textarea data-key="m1_question"></textarea>
+        <label class="field">Dugaan awal</label>
+        <textarea data-key="m1_hypothesis"></textarea>
+      </div>
+
+      
+<div class="source-card">
+<h3>🎮 Sumber Belajar Digital: Gim Yuk Hemat Energi</h3>
+<p>Gunakan gim edukasi untuk mengenali kebiasaan hemat energi dan perilaku ramah lingkungan.</p>
+<a class="source-link" target="_blank" href="https://murid.kemendikdasmen.go.id/sumber-belajar/materi/gim-edukasi/yuk-hemat-energi-513958b6-6dfd-4281-bb68-28470787b096?id_sub_unit=32670c1c-8d6b-4f82-abb4-9de3ac6b2c11">
+🌐 Mainkan Gim di Ruang Murid
+</a>
+<div class="source-done">
+<label><input type="checkbox" data-key="ruang_murid_hemat_energi">
+Saya sudah mencoba gim Yuk Hemat Energi
+</label>
+</div>
+</div>
+<div class="card activity assessment-card" id="assessment-p1">
+        <div class="assessment-head">
+          <div>
+            <h2>🧠 Asesmen HOTS Akhir Pertemuan 1</h2>
+            <p class="tiny">Energi terbarukan, hemat energi, lingkungan, dan penyelidikan.</p>
+          </div>
+          <span class="assessment-badge">5 SOAL • HOTS</span>
+        </div>
+
+        <div class="assessment-question">
+          <span class="qtype">PILIHAN GANDA • ANALISIS</span>
+          <h4>1. Pada siang hari kelas sudah terang oleh cahaya matahari, tetapi delapan lampu tetap menyala. Tindakan yang paling tepat adalah...</h4>
+          <label class="option"><input type="radio" name="p1q1" value="a" data-assessment="p1"> Menutup semua jendela agar cahaya lampu lebih terlihat.</label>
+          <label class="option"><input type="radio" name="p1q1" value="b" data-assessment="p1"> Mematikan lampu yang tidak diperlukan dan memanfaatkan cahaya alami.</label>
+          <label class="option"><input type="radio" name="p1q1" value="c" data-assessment="p1"> Menyalakan kipas tambahan agar listrik digunakan secara merata.</label>
+          <label class="option"><input type="radio" name="p1q1" value="d" data-assessment="p1"> Membiarkan semua lampu menyala karena listrik selalu tersedia.</label>
+        </div>
+
+        <div class="assessment-question">
+          <span class="qtype">BENAR / SALAH • MENILAI HUBUNGAN SEBAB-AKIBAT</span>
+          <h4>2. Jika sekolah mengurangi listrik dari bahan bakar fosil dan memanfaatkan energi surya, dampak lingkungan dapat berkurang karena panel surya tidak memerlukan pembakaran bahan bakar saat digunakan.</h4>
+          <label class="option"><input type="radio" name="p1q2" value="true" data-assessment="p1"> Benar</label>
+          <label class="option"><input type="radio" name="p1q2" value="false" data-assessment="p1"> Salah</label>
+        </div>
+
+        <div class="assessment-question">
+          <span class="qtype">PILIHAN GANDA • MERANCANG PENYELIDIKAN</span>
+          <h4>3. Kelompokmu menemukan kipas sering menyala ketika kelas kosong. Pertanyaan penyelidikan yang paling baik untuk memperoleh data adalah...</h4>
+          <label class="option"><input type="radio" name="p1q3" value="a" data-assessment="p1"> Mengapa semua orang suka kipas?</label>
+          <label class="option"><input type="radio" name="p1q3" value="b" data-assessment="p1"> Apakah kipas sekolah bagus?</label>
+          <label class="option"><input type="radio" name="p1q3" value="c" data-assessment="p1"> Berapa lama kipas menyala saat kelas kosong dan berapa kali hal itu terjadi selama satu minggu?</label>
+          <label class="option"><input type="radio" name="p1q3" value="d" data-assessment="p1"> Siapa yang paling sering berada di kelas?</label>
+        </div>
+
+        <div class="assessment-question">
+          <span class="qtype">MEMASANGKAN • KLASIFIKASI</span>
+          <h4>4. Pasangkan setiap contoh dengan kategori yang paling tepat.</h4>
+          <div class="match-grid">
+            <div class="match-row"><b>☀️ Matahari</b><span class="arrow">→</span>
+              <select name="p1q4a" data-assessment="p1"><option value="">Pilih pasangan</option><option value="renew">Energi terbarukan</option><option value="nonrenew">Energi tidak terbarukan</option><option value="saving">Perilaku hemat energi</option></select>
+            </div>
+            <div class="match-row"><b>⛽ Minyak bumi</b><span class="arrow">→</span>
+              <select name="p1q4b" data-assessment="p1"><option value="">Pilih pasangan</option><option value="renew">Energi terbarukan</option><option value="nonrenew">Energi tidak terbarukan</option><option value="saving">Perilaku hemat energi</option></select>
+            </div>
+            <div class="match-row"><b>📽️ Mematikan proyektor saat tidak digunakan</b><span class="arrow">→</span>
+              <select name="p1q4c" data-assessment="p1"><option value="">Pilih pasangan</option><option value="renew">Energi terbarukan</option><option value="nonrenew">Energi tidak terbarukan</option><option value="saving">Perilaku hemat energi</option></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="assessment-question">
+          <span class="qtype">PILIHAN GANDA • PEMECAHAN MASALAH</span>
+          <h4>5. Sebuah kelas terasa panas sehingga kipas dan pendingin sering digunakan. Solusi yang paling baik untuk menghemat energi sekaligus memperbaiki lingkungan adalah...</h4>
+          <label class="option"><input type="radio" name="p1q5" value="a" data-assessment="p1"> Menyalakan semua alat pendingin sejak pagi.</label>
+          <label class="option"><input type="radio" name="p1q5" value="b" data-assessment="p1"> Menutup ventilasi agar udara tidak masuk.</label>
+          <label class="option"><input type="radio" name="p1q5" value="c" data-assessment="p1"> Memperbaiki ventilasi, memanfaatkan udara alami, dan menanam tanaman peneduh.</label>
+          <label class="option"><input type="radio" name="p1q5" value="d" data-assessment="p1"> Memindahkan semua kegiatan ke ruangan yang lebih gelap.</label>
+        </div>
+
+        <button class="btn blue" type="button" data-submit-assessment="p1">📊 Periksa Asesmen Pertemuan 1</button>
+        <div id="assessmentResult-p1" class="assessment-result hidden">
+          <div class="tiny">SKOR ASESMEN PERTEMUAN 1</div>
+          <div class="assessment-score" id="assessmentScore-p1">0</div>
+          <div id="assessmentMessage-p1"></div>
+        </div>
+      </div>
+
+      <div class="footer-nav"><button class="btn soft" data-page="missions">← Peta Misi</button><button class="btn" data-complete="m1" data-requires-assessment="p1" data-next="m2">✅ Selesaikan Pertemuan 1 & Lanjut</button></div>
+    </section>
+
+    <!-- M2 -->
+    <section class="page" id="page-m2">
+      <span class="eyebrow">MISI 2</span>
+      <h1 class="section-title">💧 Water Cycle Lab</h1>
+      <p class="lead">Amati perubahan air dan hubungkan dengan siklus air di alam.</p>
+
+      <div class="card">
+        <div class="info green"><b>Alur:</b> Evaporasi → Kondensasi → Presipitasi → Air kembali ke permukaan.</div>
+        <label class="field">Alat dan bahan</label><textarea data-key="m2_tools"></textarea>
+        <label class="field">Apa perubahan yang kamu lihat?</label><textarea data-key="m2_change"></textarea>
+        <label class="field">Mengapa perubahan itu terjadi?</label><textarea data-key="m2_reason"></textarea>
+        <label class="field">Hubungannya dengan siklus air di alam</label><textarea data-key="m2_cycle"></textarea>
+        <label class="field">Kesimpulan</label><textarea data-key="m2_conclusion"></textarea>
+      </div>
+
+      <div class="footer-nav"><button class="btn soft" data-page="m1">← Misi 1</button><button class="btn" data-complete="m2" data-next="m3">✅ Selesaikan & Lanjut</button></div>
+    </section>
+
+    <!-- M3 -->
+    <section class="page" id="page-m3">
+      <span class="eyebrow">MISI 3</span>
+      <h1 class="section-title">☀️ Solar Car Explorer</h1>
+      <p class="lead">Amati bagaimana cahaya memengaruhi gerak mobil panel surya.</p>
+
+      <div class="card">
+        <div class="info">☀️ Cahaya Matahari → ▦ Panel Surya → ⚡ Energi Listrik → ⚙️ Motor → 🚗 Gerak</div>
+        <label class="field">Apa sumber energi mobil?</label><textarea data-key="m3_source"></textarea>
+        <label class="field">Apa fungsi panel surya?</label><textarea data-key="m3_panel"></textarea>
+        <label class="field">Apa yang terjadi saat cahaya berkurang?</label><textarea data-key="m3_light"></textarea>
+        <label class="field">Kesimpulan pengamatan</label><textarea data-key="m3_conclusion"></textarea>
+      </div>
+
+      <div class="footer-nav"><button class="btn soft" data-page="m2">← Misi 2</button><button class="btn" data-complete="m3" data-next="m4">✅ Selesaikan & Lanjut</button></div>
+    </section>
+
+    <!-- M4 -->
+    <section class="page" id="page-m4">
+      <span class="eyebrow">MISI 4</span>
+      <h1 class="section-title">📊 Eco Data Detective</h1>
+      <p class="lead">Masukkan data berdasarkan hasil pengamatan nyata di sekolah.</p>
+
+      <div class="card">
+        <div class="grid two">
+          <div><label class="field">Jumlah lampu</label><input type="number" min="0" data-key="m4_lamp"></div>
+          <div><label class="field">Jumlah kipas</label><input type="number" min="0" data-key="m4_fan"></div>
+          <div><label class="field">Jumlah keran</label><input type="number" min="0" data-key="m4_tap"></div>
+          <div><label class="field">Keran bocor</label><input type="number" min="0" data-key="m4_leak"></div>
+        </div>
+        <label class="field">Masalah atau pola yang ditemukan</label><textarea data-key="m4_analysis"></textarea>
+        <label class="field">Saran perbaikan</label><textarea data-key="m4_solution"></textarea>
+      </div>
+
+      <div class="card activity assessment-card" id="assessment-p2">
+        <div class="assessment-head">
+          <div>
+            <h2>🧠 Asesmen HOTS Akhir Pertemuan 2</h2>
+            <p class="tiny">Siklus air, Solar Car, audit energi-air, data jujur, dan mitigasi.</p>
+          </div>
+          <span class="assessment-badge">5 SOAL • HOTS</span>
+        </div>
+
+        <div class="assessment-question">
+          <span class="qtype">PILIHAN GANDA • ANALISIS FENOMENA</span>
+          <h4>1. Uap air dari wadah hangat menyentuh tutup yang dingin lalu terbentuk titik-titik air. Proses yang paling tepat menjelaskan kejadian itu adalah...</h4>
+          <label class="option"><input type="radio" name="p2q1" value="a" data-assessment="p2"> Evaporasi, karena air cair berubah menjadi uap.</label>
+          <label class="option"><input type="radio" name="p2q1" value="b" data-assessment="p2"> Kondensasi, karena uap air mendingin dan berubah menjadi titik air.</label>
+          <label class="option"><input type="radio" name="p2q1" value="c" data-assessment="p2"> Presipitasi, karena semua titik air langsung menjadi hujan.</label>
+          <label class="option"><input type="radio" name="p2q1" value="d" data-assessment="p2"> Infiltrasi, karena air masuk ke dalam tanah.</label>
+        </div>
+
+        <div class="assessment-question">
+          <span class="qtype">BENAR / SALAH • MENARIK KESIMPULAN</span>
+          <h4>2. Ketika sebagian panel surya ditutup, mobil dapat melambat karena cahaya yang diterima panel berkurang sehingga energi listrik yang dihasilkan juga dapat berkurang.</h4>
+          <label class="option"><input type="radio" name="p2q2" value="true" data-assessment="p2"> Benar</label>
+          <label class="option"><input type="radio" name="p2q2" value="false" data-assessment="p2"> Salah</label>
+        </div>
+
+        <div class="assessment-question">
+          <span class="qtype">MEMASANGKAN • KONSEP DAN FUNGSI</span>
+          <h4>3. Pasangkan proses atau komponen dengan penjelasan yang tepat.</h4>
+          <div class="match-grid">
+            <div class="match-row"><b>💨 Evaporasi</b><span class="arrow">→</span>
+              <select name="p2q3a" data-assessment="p2"><option value="">Pilih pasangan</option><option value="liquid-vapor">Air cair berubah menjadi uap karena menerima panas</option><option value="vapor-liquid">Uap berubah menjadi titik air karena mendingin</option><option value="light-electric">Mengubah energi cahaya menjadi energi listrik</option></select>
+            </div>
+            <div class="match-row"><b>☁️ Kondensasi</b><span class="arrow">→</span>
+              <select name="p2q3b" data-assessment="p2"><option value="">Pilih pasangan</option><option value="liquid-vapor">Air cair berubah menjadi uap karena menerima panas</option><option value="vapor-liquid">Uap berubah menjadi titik air karena mendingin</option><option value="light-electric">Mengubah energi cahaya menjadi energi listrik</option></select>
+            </div>
+            <div class="match-row"><b>▦ Panel surya</b><span class="arrow">→</span>
+              <select name="p2q3c" data-assessment="p2"><option value="">Pilih pasangan</option><option value="liquid-vapor">Air cair berubah menjadi uap karena menerima panas</option><option value="vapor-liquid">Uap berubah menjadi titik air karena mendingin</option><option value="light-electric">Mengubah energi cahaya menjadi energi listrik</option></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="assessment-question">
+          <span class="qtype">PILIHAN GANDA • ANALISIS DATA</span>
+          <h4>4. Hasil audit menunjukkan 20 lampu, 8 lampu menyala saat ruangan kosong, 10 keran, dan 2 keran bocor. Tindakan prioritas yang paling berdasarkan data adalah...</h4>
+          <label class="option"><input type="radio" name="p2q4" value="a" data-assessment="p2"> Membeli lebih banyak lampu dan keran.</label>
+          <label class="option"><input type="radio" name="p2q4" value="b" data-assessment="p2"> Mematikan lampu yang tidak diperlukan dan memperbaiki dua keran bocor.</label>
+          <label class="option"><input type="radio" name="p2q4" value="c" data-assessment="p2"> Menutup semua keran agar tidak ada air yang digunakan.</label>
+          <label class="option"><input type="radio" name="p2q4" value="d" data-assessment="p2"> Mengabaikan data karena jumlah lampu lebih banyak daripada keran.</label>
+        </div>
+
+        <div class="assessment-question">
+          <span class="qtype">PILIHAN GANDA • ETIKA DATA</span>
+          <h4>5. Hasil percobaan kelompok tidak sesuai dengan dugaan awal. Sikap ilmiah dan jujur yang paling tepat adalah...</h4>
+          <label class="option"><input type="radio" name="p2q5" value="a" data-assessment="p2"> Mengubah angka agar hasil terlihat sesuai dugaan.</label>
+          <label class="option"><input type="radio" name="p2q5" value="b" data-assessment="p2"> Menghapus hasil yang berbeda dari kelompok lain.</label>
+          <label class="option"><input type="radio" name="p2q5" value="c" data-assessment="p2"> Menulis data sebenarnya, memeriksa prosedur, lalu mencari penjelasan berdasarkan bukti.</label>
+          <label class="option"><input type="radio" name="p2q5" value="d" data-assessment="p2"> Mengulang percobaan sampai memperoleh angka yang diinginkan.</label>
+        </div>
+
+        <button class="btn blue" type="button" data-submit-assessment="p2">📊 Periksa Asesmen Pertemuan 2</button>
+        <div id="assessmentResult-p2" class="assessment-result hidden">
+          <div class="tiny">SKOR ASESMEN PERTEMUAN 2</div>
+          <div class="assessment-score" id="assessmentScore-p2">0</div>
+          <div id="assessmentMessage-p2"></div>
+        </div>
+      </div>
+
+      <div class="footer-nav"><button class="btn soft" data-page="m3">← Misi 3</button><button class="btn" data-complete="m4" data-requires-assessment="p2" data-next="m5">✅ Selesaikan Pertemuan 2 & Lanjut</button></div>
+    </section>
+
+    <!-- M5 -->
+    <section class="page" id="page-m5">
+      <span class="eyebrow">MISI 5</span>
+      <h1 class="section-title">🚀 Earth Solution Challenge</h1>
+      <p class="lead">Gunakan STEM untuk membuat solusi sederhana.</p>
+
+      <div class="card">
+        <label class="field">Masalah yang dipilih</label>
+        <select data-key="m5_focus">
+          <option value="">Pilih</option><option>Energi</option><option>Air</option><option>Lingkungan</option><option>Mitigasi Bencana</option>
+        </select>
+        <label class="field">Nama solusi</label><input type="text" data-key="m5_name">
+        <label class="field">Science — konsep ilmiahnya</label><textarea data-key="m5_science"></textarea>
+        <label class="field">Technology — teknologi yang digunakan</label><textarea data-key="m5_technology"></textarea>
+        <label class="field">Engineering — apa yang dibuat</label><textarea data-key="m5_engineering"></textarea>
+        <label class="field">Mathematics — data/ukuran yang diperlukan</label><textarea data-key="m5_math"></textarea>
+        <label class="field">Apa yang berhasil saat diuji?</label><textarea data-key="m5_success"></textarea>
+        <label class="field">Apa yang perlu diperbaiki?</label><textarea data-key="m5_improve"></textarea>
+      </div>
+
+      <div class="footer-nav"><button class="btn soft" data-page="m4">← Misi 4</button><button class="btn" data-complete="m5" data-next="m6">✅ Selesaikan & Lanjut</button></div>
+    </section>
+
+    <!-- M6 -->
+    <section class="page" id="page-m6">
+      <span class="eyebrow">MISI 6</span>
+      <h1 class="section-title">🎤 Present & Inspire</h1>
+      <p class="lead">Siapkan isi presentasi kelompokmu.</p>
+
+      <div class="card">
+        <label class="field">Nama kelompok</label><input type="text" data-key="m6_team">
+        <label class="field">Masalah</label><textarea data-key="m6_problem"></textarea>
+        <label class="field">Bukti / data</label><textarea data-key="m6_data"></textarea>
+        <label class="field">Solusi</label><textarea data-key="m6_solution"></textarea>
+        <label class="field">Hasil uji</label><textarea data-key="m6_test"></textarea>
+        <label class="field">Manfaat</label><textarea data-key="m6_benefit"></textarea>
+      </div>
+
+      <div class="card activity assessment-card" id="assessment-p3">
+        <div class="assessment-head">
+          <div>
+            <h2>🧠 Asesmen HOTS Akhir Pertemuan 3</h2>
+            <p class="tiny">STEM, prototipe, test & improve, data, dan komunikasi solusi.</p>
+          </div>
+          <span class="assessment-badge">5 SOAL • HOTS</span>
+        </div>
+
+        <div class="assessment-question">
+          <span class="qtype">PILIHAN GANDA • MERUMUSKAN MASALAH</span>
+          <h4>1. Sekolah menggunakan banyak air untuk menyiram tanaman pada siang hari. Rumusan masalah yang paling dapat digunakan untuk merancang solusi STEM adalah...</h4>
+          <label class="option"><input type="radio" name="p3q1" value="a" data-assessment="p3"> Mengapa tanaman membutuhkan air?</label>
+          <label class="option"><input type="radio" name="p3q1" value="b" data-assessment="p3"> Bagaimana merancang sistem penyiraman yang menggunakan lebih sedikit air tetapi tanaman tetap memperoleh air yang cukup?</label>
+          <label class="option"><input type="radio" name="p3q1" value="c" data-assessment="p3"> Apakah semua siswa menyukai tanaman?</label>
+          <label class="option"><input type="radio" name="p3q1" value="d" data-assessment="p3"> Siapa yang bertugas menyiram setiap hari?</label>
+        </div>
+
+        <div class="assessment-question">
+          <span class="qtype">BENAR / SALAH • EVALUASI PROSES DESAIN</span>
+          <h4>2. Jika prototipe tidak bekerja pada pengujian pertama, proyek harus dihentikan karena berarti ide tersebut gagal total.</h4>
+          <label class="option"><input type="radio" name="p3q2" value="true" data-assessment="p3"> Benar</label>
+          <label class="option"><input type="radio" name="p3q2" value="false" data-assessment="p3"> Salah</label>
+        </div>
+
+        <div class="assessment-question">
+          <span class="qtype">MEMASANGKAN • INTEGRASI STEM</span>
+          <h4>3. Pasangkan unsur STEM dengan aktivitas yang sesuai.</h4>
+          <div class="match-grid">
+            <div class="match-row"><b>🔬 Science</b><span class="arrow">→</span>
+              <select name="p3q3a" data-assessment="p3"><option value="">Pilih pasangan</option><option value="concept">Menjelaskan konsep ilmiah yang membuat solusi bekerja</option><option value="tools">Memilih teknologi atau alat yang membantu solusi</option><option value="design">Merancang, membuat, menguji, dan memperbaiki prototipe</option><option value="measure">Mengukur volume, waktu, ukuran, atau membandingkan data</option></select>
+            </div>
+            <div class="match-row"><b>💻 Technology</b><span class="arrow">→</span>
+              <select name="p3q3b" data-assessment="p3"><option value="">Pilih pasangan</option><option value="concept">Menjelaskan konsep ilmiah yang membuat solusi bekerja</option><option value="tools">Memilih teknologi atau alat yang membantu solusi</option><option value="design">Merancang, membuat, menguji, dan memperbaiki prototipe</option><option value="measure">Mengukur volume, waktu, ukuran, atau membandingkan data</option></select>
+            </div>
+            <div class="match-row"><b>🛠️ Engineering</b><span class="arrow">→</span>
+              <select name="p3q3c" data-assessment="p3"><option value="">Pilih pasangan</option><option value="concept">Menjelaskan konsep ilmiah yang membuat solusi bekerja</option><option value="tools">Memilih teknologi atau alat yang membantu solusi</option><option value="design">Merancang, membuat, menguji, dan memperbaiki prototipe</option><option value="measure">Mengukur volume, waktu, ukuran, atau membandingkan data</option></select>
+            </div>
+            <div class="match-row"><b>📐 Mathematics</b><span class="arrow">→</span>
+              <select name="p3q3d" data-assessment="p3"><option value="">Pilih pasangan</option><option value="concept">Menjelaskan konsep ilmiah yang membuat solusi bekerja</option><option value="tools">Memilih teknologi atau alat yang membantu solusi</option><option value="design">Merancang, membuat, menguji, dan memperbaiki prototipe</option><option value="measure">Mengukur volume, waktu, ukuran, atau membandingkan data</option></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="assessment-question">
+          <span class="qtype">PILIHAN GANDA • TEST & IMPROVE</span>
+          <h4>4. Prototipe penampung air bocor pada sambungan ketika diuji. Langkah perbaikan yang paling tepat adalah...</h4>
+          <label class="option"><input type="radio" name="p3q4" value="a" data-assessment="p3"> Mengganti seluruh ide tanpa melihat penyebab kebocoran.</label>
+          <label class="option"><input type="radio" name="p3q4" value="b" data-assessment="p3"> Menutup kebocoran secara asal agar presentasi cepat selesai.</label>
+          <label class="option"><input type="radio" name="p3q4" value="c" data-assessment="p3"> Mengidentifikasi lokasi kebocoran, memperbaiki sambungan atau bahan, lalu menguji ulang pada kondisi yang sama.</label>
+          <label class="option"><input type="radio" name="p3q4" value="d" data-assessment="p3"> Mengubah catatan hasil uji agar prototipe terlihat berhasil.</label>
+        </div>
+
+        <div class="assessment-question">
+          <span class="qtype">PILIHAN GANDA • ARGUMENTASI BERBASIS BUKTI</span>
+          <h4>5. Kelompok mengklaim prototipe mereka dapat menghemat air. Bukti yang paling kuat untuk mendukung klaim itu adalah...</h4>
+          <label class="option"><input type="radio" name="p3q5" value="a" data-assessment="p3"> Prototipe terlihat menarik dan berwarna cerah.</label>
+          <label class="option"><input type="radio" name="p3q5" value="b" data-assessment="p3"> Teman-teman mengatakan prototipe bagus.</label>
+          <label class="option"><input type="radio" name="p3q5" value="c" data-assessment="p3"> Data volume air sebelum dan sesudah menggunakan prototipe pada kondisi pengujian yang sama.</label>
+          <label class="option"><input type="radio" name="p3q5" value="d" data-assessment="p3"> Nama prototipe yang paling kreatif.</label>
+        </div>
+
+        <button class="btn blue" type="button" data-submit-assessment="p3">📊 Periksa Asesmen Pertemuan 3</button>
+        <div id="assessmentResult-p3" class="assessment-result hidden">
+          <div class="tiny">SKOR ASESMEN PERTEMUAN 3</div>
+          <div class="assessment-score" id="assessmentScore-p3">0</div>
+          <div id="assessmentMessage-p3"></div>
+        </div>
+      </div>
+
+      <div class="footer-nav"><button class="btn soft" data-page="m5">← Misi 5</button><button class="btn" data-complete="m6" data-requires-assessment="p3" data-next="m7">✅ Selesaikan Pertemuan 3 & Lanjut</button></div>
+    </section>
+
+    <!-- M7 -->
+    <section class="page" id="page-m7">
+      <span class="eyebrow">MISI 7</span>
+      <h1 class="section-title">🌱 Refleksi & Aksi 7 Hari</h1>
+      <p class="lead">Refleksikan pembelajaran dan catat aksi hijaumu.</p>
+
+      <div class="card">
+        <label class="field">Hal paling penting yang saya pelajari</label><textarea data-key="m7_learning"></textarea>
+        <label class="field">Hal yang paling membuat saya penasaran</label><textarea data-key="m7_curious"></textarea>
+        <label class="field">Bagaimana saya menunjukkan kejujuran?</label><textarea data-key="m7_honesty"></textarea>
+        <label class="field">Kontribusi saya untuk lingkungan</label><textarea data-key="m7_contribution"></textarea>
+      </div>
+
+      <div class="card activity">
+        <h2>✅ Checklist Aksi 7 Hari</h2>
+        <table>
+          <thead><tr><th>Hari</th><th>Selesai?</th><th>Aksi</th></tr></thead>
+          <tbody>
+            <tr class="day-row"><td>Day 1</td><td><input type="checkbox" data-key="day1"></td><td><input type="text" data-key="day1_note"></td></tr>
+            <tr class="day-row"><td>Day 2</td><td><input type="checkbox" data-key="day2"></td><td><input type="text" data-key="day2_note"></td></tr>
+            <tr class="day-row"><td>Day 3</td><td><input type="checkbox" data-key="day3"></td><td><input type="text" data-key="day3_note"></td></tr>
+            <tr class="day-row"><td>Day 4</td><td><input type="checkbox" data-key="day4"></td><td><input type="text" data-key="day4_note"></td></tr>
+            <tr class="day-row"><td>Day 5</td><td><input type="checkbox" data-key="day5"></td><td><input type="text" data-key="day5_note"></td></tr>
+            <tr class="day-row"><td>Day 6</td><td><input type="checkbox" data-key="day6"></td><td><input type="text" data-key="day6_note"></td></tr>
+            <tr class="day-row"><td>Day 7</td><td><input type="checkbox" data-key="day7"></td><td><input type="text" data-key="day7_note"></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="footer-nav"><button class="btn soft" data-page="m6">← Misi 6</button><button class="btn" data-complete="m7" data-next="results">✅ Selesaikan Petualangan</button></div>
+    </section>
+
+    <!-- HASIL SISWA -->
+    <section class="page" id="page-results">
+<div class="mission-flow">
+<h3>🌱 Reflection & Action 7 Days</h3>
+<p>Setelah menyelesaikan misi, tuliskan perubahan kecil yang akan dilakukan:
+hemat energi, hemat air, menjaga lingkungan, dan membangun kebiasaan positif.</p>
+</div>
+
+      <span class="eyebrow">📊 HASIL SISWA</span>
+      <h1 class="section-title">Hasil Belajarku</h1>
+      <div class="grid">
+        <div class="card" style="text-align:center"><div class="tiny">PROGRESS</div><div class="score" id="resultProgress">0%</div></div>
+        <div class="card" style="text-align:center"><div class="tiny">MISI SELESAI</div><div class="score" id="resultMission">0/7</div></div>
+        <div class="card" style="text-align:center"><div class="tiny">RATA-RATA ASESMEN</div><div class="score" id="resultAssessmentAvg">—</div></div>
+      </div>
+      <div class="card activity">
+        <h2>🧠 Skor Asesmen HOTS</h2>
+        <div class="assessment-scores">
+          <div class="assessment-score-box"><span class="tiny">PERTEMUAN 1</span><b id="resultP1">—</b></div>
+          <div class="assessment-score-box"><span class="tiny">PERTEMUAN 2</span><b id="resultP2">—</b></div>
+          <div class="assessment-score-box"><span class="tiny">PERTEMUAN 3</span><b id="resultP3">—</b></div>
+        </div>
+      </div>
+      <div class="card activity">
+        <h2>🏅 Status Misi</h2>
+        <div id="resultMissionList"></div>
+      </div>
+      <div class="footer-nav"><button class="btn soft" data-page="home">← Beranda</button><button class="btn blue" data-page="missions">🧭 Peta Misi</button></div>
+    </section>
+
+    <!-- DASHBOARD GURU -->
+    <section class="page" id="page-teacher">
+      <div class="teacher-head">
+        <div>
+          <span class="eyebrow">👩‍🏫 MODE GURU</span>
+          <h1 class="section-title">Dashboard Kinerja Siswa</h1>
+          <p class="lead">Data berikut tersimpan pada browser/perangkat ini.</p>
+        </div>
+        <div class="btnrow">
+          <button class="btn blue" id="exportBtn">⬇ Export CSV</button>
+          <button class="btn danger" id="teacherLogoutBtn">Keluar Mode Guru</button>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat"><span class="tiny">JUMLAH SISWA</span><strong id="teacherStudentCount">0</strong></div>
+        <div class="stat"><span class="tiny">RATA-RATA PROGRESS</span><strong id="teacherAvgProgress">0%</strong></div>
+        <div class="stat"><span class="tiny">RATA-RATA ASESMEN</span><strong id="teacherAvgAssessment">—</strong></div>
+        <div class="stat"><span class="tiny">SELESAI 7 MISI</span><strong id="teacherCompleteCount">0</strong></div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px">
+          <input id="teacherSearch" type="text" placeholder="Cari nama / kelas / kelompok" style="max-width:330px">
+          <button class="btn soft" id="refreshTeacherBtn">↻ Refresh</button>
+        </div>
+        <div class="tablewrap">
+          <table class="teacher-table">
+            <thead><tr><th>Nama</th><th>Kelas</th><th>Kelompok</th><th>Progress</th><th>Asesmen P1 / P2 / P3</th><th>Update</th><th>Detail</th></tr></thead>
+            <tbody id="teacherRows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card activity">
+        <h2>⚙️ Pengaturan Data</h2>
+        <p class="tiny">Hapus semua data hanya jika benar-benar diperlukan.</p>
+        <button class="btn danger" id="deleteAllStudentsBtn">🗑️ Hapus Semua Data Siswa</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="modal" id="detailModal">
+  <div class="modalbox">
+    <div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
+      <h2 id="detailTitle" style="margin:0;color:#075985">Detail Siswa</h2>
+      <button class="iconbtn" id="closeDetail">✕</button>
+    </div>
+    <div id="detailBody" style="margin-top:15px"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+"use strict";
+
+/* =========================================================
+   PENGATURAN SEDERHANA
+   Ganti kode guru di bawah ini jika diperlukan.
+   ========================================================= */
+const TEACHER_CODE = "2468";
+
+const DB_KEY = "sentriya_students_same_html_v1";
+const SESSION_KEY = "sentriya_current_student_v1";
+
+let currentStudentId = sessionStorage.getItem(SESSION_KEY) || "";
+let currentStudent = null;
+
+const pages = [...document.querySelectorAll(".page")];
+const toast = document.getElementById("toast");
+
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add("show");
+  clearTimeout(showToast.t);
+  showToast.t = setTimeout(()=>toast.classList.remove("show"),2200);
+}
+function escapeHTML(s){
+  return String(s ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+}
+function now(){
+  return new Date().toLocaleString("id-ID");
+}
+function getDB(){
+  try{
+    const x = JSON.parse(localStorage.getItem(DB_KEY) || "{}");
+    return x && typeof x === "object" ? x : {};
+  }catch(e){ return {}; }
+}
+function setDB(db){
+  localStorage.setItem(DB_KEY,JSON.stringify(db));
+}
+function makeStudentId(name,className){
+  return (className.trim()+"__"+name.trim()).toLowerCase().replace(/\s+/g,"_").replace(/[^\w\-]+/g,"");
+}
+function blankStudent(id,name,className,group){
+  return {
+    id,name,className,group,
+    createdAt:now(),updatedAt:now(),
+    currentPage:"home",
+    completed:{},
+    data:{},
+    quiz:{done:false,score:null,answers:{}},
+    assessments:{
+      p1:{done:false,score:null,answers:{}},
+      p2:{done:false,score:null,answers:{}},
+      p3:{done:false,score:null,answers:{}}
+    }
+  };
+}
+function saveCurrent(){
+  if(!currentStudent) return;
+  currentStudent.updatedAt = now();
+  const db = getDB();
+  db[currentStudent.id] = currentStudent;
+  setDB(db);
+  updateStudentUI();
+}
+
+function emptyAssessments(){
+  return {
+    p1:{done:false,score:null,answers:{}},
+    p2:{done:false,score:null,answers:{}},
+    p3:{done:false,score:null,answers:{}}
+  };
+}
+function ensureAssessmentState(st){
+  if(!st.assessments) st.assessments=emptyAssessments();
+  ["p1","p2","p3"].forEach(p=>{
+    if(!st.assessments[p]) st.assessments[p]={done:false,score:null,answers:{}};
+    if(!st.assessments[p].answers) st.assessments[p].answers={};
+  });
+}
+function assessmentAverage(st=currentStudent){
+  if(!st) return null;
+  ensureAssessmentState(st);
+  const scores=["p1","p2","p3"]
+    .filter(p=>st.assessments[p].done && Number.isFinite(Number(st.assessments[p].score)))
+    .map(p=>Number(st.assessments[p].score));
+  return scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : null;
+}
+
+function loadStudent(id){
+  const db = getDB();
+  if(!db[id]) return false;
+  currentStudent = db[id];
+  ensureAssessmentState(currentStudent);
+  currentStudentId = id;
+  sessionStorage.setItem(SESSION_KEY,id);
+  restoreStudentInputs();
+  updateStudentUI();
+  return true;
+}
+function studentCountDone(st=currentStudent){
+  if(!st) return 0;
+  return ["m1","m2","m3","m4","m5","m6","m7"].filter(k=>st.completed?.[k]).length;
+}
+function studentPercent(st=currentStudent){
+  return Math.round(studentCountDone(st)/7*100);
+}
+function showPage(name){
+  pages.forEach(p=>p.classList.remove("active"));
+  const page = document.getElementById("page-"+name);
+  if(page) page.classList.add("active");
+
+  if(currentStudent && !["mode","student-login","teacher-login","teacher"].includes(name)){
+    currentStudent.currentPage=name;
+    saveCurrent();
+  }
+  if(name==="teacher") renderTeacher();
+  if(name==="results") renderStudentResults();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+
+document.getElementById("studentModeBtn").onclick=()=>showPage("student-login");
+document.getElementById("teacherModeBtn").onclick=()=>showPage("teacher-login");
+
+document.getElementById("enterStudentBtn").onclick=()=>{
+  const name=document.getElementById("studentName").value.trim();
+  const className=document.getElementById("studentClass").value.trim();
+  const group=document.getElementById("studentGroup").value.trim();
+  if(!name || !className){
+    showToast("Nama dan kelas wajib diisi.");
+    return;
+  }
+
+  const id=makeStudentId(name,className);
+  const db=getDB();
+  if(!db[id]){
+    db[id]=blankStudent(id,name,className,group);
+  }else{
+    db[id].name=name; db[id].className=className; db[id].group=group || db[id].group || "";
+    db[id].updatedAt=now();
+    ensureAssessmentState(db[id]);
+  }
+  setDB(db);
+  loadStudent(id);
+  document.getElementById("modeChip").textContent="🧑‍🎓 Mode Siswa";
+  showPage("home");
+  showToast("Selamat belajar, "+name+"!");
+};
+
+document.getElementById("switchStudentBtn").onclick=()=>{
+  showPage("student-login");
+};
+document.getElementById("studentLogoutBtn").onclick=()=>{
+  currentStudent=null; currentStudentId="";
+  sessionStorage.removeItem(SESSION_KEY);
+  document.getElementById("modeChip").textContent="Pilih mode";
+  showPage("mode");
+};
+
+document.getElementById("enterTeacherBtn").onclick=()=>{
+  const code=document.getElementById("teacherPassword").value;
+  if(code!==TEACHER_CODE){
+    showToast("Kode guru salah.");
+    document.getElementById("teacherPassword").value="";
+    return;
+  }
+  document.getElementById("teacherPassword").value="";
+  document.getElementById("modeChip").textContent="👩‍🏫 Mode Guru";
+  showPage("teacher");
+};
+document.getElementById("teacherLogoutBtn").onclick=()=>{
+  document.getElementById("modeChip").textContent="Pilih mode";
+  showPage("mode");
+};
+
+function restoreStudentInputs(){
+  if(!currentStudent) return;
+  document.querySelectorAll("[data-key]").forEach(el=>{
+    const key=el.dataset.key;
+    const v=currentStudent.data?.[key];
+    if(el.type==="checkbox") el.checked=Boolean(v);
+    else if(v!==undefined) el.value=v;
+    else if(el.type!=="radio") el.value="";
+  });
+
+  ensureAssessmentState(currentStudent);
+  document.querySelectorAll("[data-assessment]").forEach(el=>{
+    if(el.type==="radio") el.checked=false;
+    else if(el.tagName==="SELECT") el.value="";
+  });
+
+  ["p1","p2","p3"].forEach(p=>{
+    const a=currentStudent.assessments[p];
+    Object.entries(a.answers||{}).forEach(([name,value])=>{
+      const radio=document.querySelector(`[name="${name}"][value="${value}"]`);
+      if(radio && radio.type==="radio") radio.checked=true;
+      const select=document.querySelector(`select[name="${name}"]`);
+      if(select) select.value=value;
+    });
+    renderAssessmentResult(p);
+  });
+}
+
+document.addEventListener("input",e=>{
+  if(!currentStudent || !e.target.matches("[data-key]")) return;
+  const el=e.target,key=el.dataset.key;
+  currentStudent.data[key]=el.type==="checkbox"?el.checked:el.value;
+  saveCurrent();
+});
+document.addEventListener("change",e=>{
+  if(!currentStudent || !e.target.matches("[data-key]")) return;
+  const el=e.target,key=el.dataset.key;
+  currentStudent.data[key]=el.type==="checkbox"?el.checked:el.value;
+  saveCurrent();
+  updateDayRows();
+});
+
+const ASSESSMENT_CONFIG={
+  p1:[
+    {type:"single",name:"p1q1",correct:"b"},
+    {type:"single",name:"p1q2",correct:"true"},
+    {type:"single",name:"p1q3",correct:"c"},
+    {type:"match",names:["p1q4a","p1q4b","p1q4c"],correct:["renew","nonrenew","saving"]},
+    {type:"single",name:"p1q5",correct:"c"}
+  ],
+  p2:[
+    {type:"single",name:"p2q1",correct:"b"},
+    {type:"single",name:"p2q2",correct:"true"},
+    {type:"match",names:["p2q3a","p2q3b","p2q3c"],correct:["liquid-vapor","vapor-liquid","light-electric"]},
+    {type:"single",name:"p2q4",correct:"b"},
+    {type:"single",name:"p2q5",correct:"c"}
+  ],
+  p3:[
+    {type:"single",name:"p3q1",correct:"b"},
+    {type:"single",name:"p3q2",correct:"false"},
+    {type:"match",names:["p3q3a","p3q3b","p3q3c","p3q3d"],correct:["concept","tools","design","measure"]},
+    {type:"single",name:"p3q4",correct:"c"},
+    {type:"single",name:"p3q5",correct:"c"}
+  ]
+};
+
+document.addEventListener("change",e=>{
+  if(!currentStudent || !e.target.matches("[data-assessment]")) return;
+  const p=e.target.dataset.assessment;
+  ensureAssessmentState(currentStudent);
+  currentStudent.assessments[p].answers[e.target.name]=e.target.value;
+  saveCurrent();
+});
+
+function renderAssessmentResult(p){
+  if(!currentStudent) return;
+  ensureAssessmentState(currentStudent);
+  const a=currentStudent.assessments[p];
+  const box=document.getElementById("assessmentResult-"+p);
+  const scoreEl=document.getElementById("assessmentScore-"+p);
+  const msgEl=document.getElementById("assessmentMessage-"+p);
+  if(!box || !scoreEl || !msgEl) return;
+
+  if(!a.done){
+    box.classList.add("hidden");
+    return;
+  }
+  box.classList.remove("hidden");
+  scoreEl.textContent=a.score;
+  msgEl.textContent=a.score>=80
+    ?"🌟 Hebat! Kamu mampu menganalisis dan menerapkan konsep dengan baik."
+    :a.score>=60
+      ?"👍 Bagus! Tinjau kembali beberapa konsep lalu coba jelaskan alasan jawabanmu."
+      :"💡 Tetap semangat. Baca kembali materi, amati bukti, lalu coba lagi dengan penalaranmu.";
+}
+
+function submitAssessment(p){
+  if(!currentStudent) return;
+  ensureAssessmentState(currentStudent);
+  const config=ASSESSMENT_CONFIG[p];
+  let complete=true, correctCount=0;
+
+  config.forEach(q=>{
+    if(q.type==="single"){
+      const checked=document.querySelector(`[name="${q.name}"]:checked`);
+      if(!checked){complete=false;return;}
+      currentStudent.assessments[p].answers[q.name]=checked.value;
+      if(checked.value===q.correct) correctCount++;
+    }else{
+      const values=q.names.map(name=>{
+        const el=document.querySelector(`select[name="${name}"]`);
+        const value=el?.value || "";
+        if(!value) complete=false;
+        currentStudent.assessments[p].answers[name]=value;
+        return value;
+      });
+      if(values.every((v,i)=>v===q.correct[i])) correctCount++;
+    }
+  });
+
+  if(!complete){
+    showToast("Lengkapi semua 5 soal asesmen terlebih dahulu.");
+    return;
+  }
+
+  const score=correctCount*20;
+  currentStudent.assessments[p].done=true;
+  currentStudent.assessments[p].score=score;
+  saveCurrent();
+  renderAssessmentResult(p);
+  showToast("✅ Asesmen selesai. Skor: "+score);
+}
+
+document.querySelectorAll("[data-submit-assessment]").forEach(btn=>{
+  btn.addEventListener("click",()=>submitAssessment(btn.dataset.submitAssessment));
+});
+
+
+document.querySelectorAll("[data-complete]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    if(!currentStudent){showToast("Masuk sebagai siswa terlebih dahulu.");return;}
+    const required=btn.dataset.requiresAssessment;
+    if(required){
+      ensureAssessmentState(currentStudent);
+      if(!currentStudent.assessments[required].done){
+        showToast("🧠 Selesaikan asesmen akhir pertemuan terlebih dahulu.");
+        document.getElementById("assessment-"+required)?.scrollIntoView({behavior:"smooth",block:"start"});
+        return;
+      }
+    }
+    const m=btn.dataset.complete;
+    currentStudent.completed[m]=true;
+    saveCurrent();
+    showToast("✅ Misi selesai!");
+    const next=btn.dataset.next;
+    if(next) setTimeout(()=>showPage(next),350);
+  });
+});
+
+function updateDayRows(){
+  document.querySelectorAll(".day-row").forEach(row=>{
+    const cb=row.querySelector('input[type="checkbox"]');
+    row.classList.toggle("done",!!cb?.checked);
+  });
+}
+
+function updateStudentUI(){
+  if(!currentStudent) return;
+  document.getElementById("studentDisplayName").textContent=currentStudent.name;
+  document.getElementById("studentDisplayClass").textContent=currentStudent.className;
+  document.getElementById("studentDisplayGroup").textContent=currentStudent.group || "Tanpa kelompok";
+
+  const pct=studentPercent();
+  document.getElementById("homeProgressText").textContent=pct+"%";
+  document.getElementById("homeProgress").style.width=pct+"%";
+
+  document.querySelectorAll("[data-mission-card]").forEach(card=>{
+    const m=card.dataset.missionCard;
+    const done=!!currentStudent.completed?.[m];
+    card.classList.toggle("done",done);
+    card.querySelector(".status").textContent=done?"✅ Selesai":"Belum selesai";
+  });
+  updateDayRows();
+}
+function renderStudentResults(){
+  if(!currentStudent) return;
+  const n=studentCountDone(),p=studentPercent();
+  document.getElementById("resultProgress").textContent=p+"%";
+  document.getElementById("resultMission").textContent=n+"/7";
+  ensureAssessmentState(currentStudent);
+  const avg=assessmentAverage(currentStudent);
+  document.getElementById("resultAssessmentAvg").textContent=avg===null?"—":avg;
+  document.getElementById("resultP1").textContent=currentStudent.assessments.p1.done?currentStudent.assessments.p1.score:"—";
+  document.getElementById("resultP2").textContent=currentStudent.assessments.p2.done?currentStudent.assessments.p2.score:"—";
+  document.getElementById("resultP3").textContent=currentStudent.assessments.p3.done?currentStudent.assessments.p3.score:"—";
+  document.getElementById("resultMissionList").innerHTML=["m1","m2","m3","m4","m5","m6","m7"].map((m,i)=>
+    `<div class="option">${currentStudent.completed?.[m]?"✅":"⬜"} <b>Misi ${i+1}</b></div>`
+  ).join("");
+}
+
+/* ==========================
+   MODE GURU
+   ========================== */
+function allStudents(){
+  return Object.values(getDB()).sort((a,b)=>(a.className+a.name).localeCompare(b.className+b.name));
+}
+function renderTeacher(){
+  const all=allStudents();
+  const q=document.getElementById("teacherSearch").value.toLowerCase().trim();
+  const filtered=all.filter(s=>[s.name,s.className,s.group].join(" ").toLowerCase().includes(q));
+
+  document.getElementById("teacherStudentCount").textContent=all.length;
+  const p=all.map(studentPercent);
+  document.getElementById("teacherAvgProgress").textContent=p.length?Math.round(p.reduce((a,b)=>a+b,0)/p.length)+"%":"0%";
+  const assessmentScores=[];
+  all.forEach(s=>{
+    ensureAssessmentState(s);
+    ["p1","p2","p3"].forEach(k=>{
+      if(s.assessments[k].done && Number.isFinite(Number(s.assessments[k].score))){
+        assessmentScores.push(Number(s.assessments[k].score));
+      }
+    });
+  });
+  document.getElementById("teacherAvgAssessment").textContent=assessmentScores.length
+    ?Math.round(assessmentScores.reduce((a,b)=>a+b,0)/assessmentScores.length)
+    :"—";
+  document.getElementById("teacherCompleteCount").textContent=all.filter(s=>studentCountDone(s)===7).length;
+
+  const tbody=document.getElementById("teacherRows");
+  tbody.innerHTML=filtered.length?filtered.map(s=>`
+    <tr>
+      <td><b>${escapeHTML(s.name)}</b></td>
+      <td>${escapeHTML(s.className)}</td>
+      <td>${escapeHTML(s.group||"—")}</td>
+      <td><span class="pill ${studentCountDone(s)===7?"done":""}">${studentCountDone(s)}/7 · ${studentPercent(s)}%</span></td>
+      <td>${(()=>{ensureAssessmentState(s);return ["p1","p2","p3"].map(k=>s.assessments[k].done?escapeHTML(s.assessments[k].score):"—").join(" / ")})()}</td>
+      <td class="tiny">${escapeHTML(s.updatedAt||"—")}</td>
+      <td><button onclick="window.__showStudentDetail('${escapeHTML(s.id)}')">Lihat</button></td>
+    </tr>
+  `).join(""):`<tr><td colspan="7">Belum ada data siswa.</td></tr>`;
+}
+document.getElementById("teacherSearch").addEventListener("input",renderTeacher);
+document.getElementById("refreshTeacherBtn").onclick=renderTeacher;
+
+window.__showStudentDetail=(id)=>{
+  const s=getDB()[id];
+  if(!s) return;
+  document.getElementById("detailTitle").textContent="👤 "+s.name+" — "+s.className;
+
+  const answerNames={
+    m1_problem:"M1 — Masalah",m1_question:"M1 — Pertanyaan penyelidikan",m1_hypothesis:"M1 — Dugaan awal",
+    m2_tools:"M2 — Alat dan bahan",m2_change:"M2 — Perubahan yang terlihat",m2_reason:"M2 — Alasan perubahan",m2_cycle:"M2 — Hubungan dengan siklus air",m2_conclusion:"M2 — Kesimpulan",
+    m3_source:"M3 — Sumber energi mobil",m3_panel:"M3 — Fungsi panel surya",m3_light:"M3 — Saat cahaya berkurang",m3_conclusion:"M3 — Kesimpulan",
+    m4_lamp:"M4 — Jumlah lampu",m4_fan:"M4 — Jumlah kipas",m4_tap:"M4 — Jumlah keran",m4_leak:"M4 — Keran bocor",m4_analysis:"M4 — Analisis",m4_solution:"M4 — Saran",
+    m5_focus:"M5 — Fokus",m5_name:"M5 — Nama solusi",m5_science:"M5 — Science",m5_technology:"M5 — Technology",m5_engineering:"M5 — Engineering",m5_math:"M5 — Mathematics",m5_success:"M5 — Hasil uji",m5_improve:"M5 — Perbaikan",
+    m6_team:"M6 — Nama kelompok",m6_problem:"M6 — Masalah",m6_data:"M6 — Bukti/data",m6_solution:"M6 — Solusi",m6_test:"M6 — Hasil uji",m6_benefit:"M6 — Manfaat",
+    m7_learning:"M7 — Pembelajaran penting",m7_curious:"M7 — Rasa ingin tahu",m7_honesty:"M7 — Kejujuran",m7_contribution:"M7 — Kontribusi lingkungan"
+  };
+
+  const answers=Object.entries(answerNames).map(([k,label])=>{
+    const v=s.data?.[k];
+    if(v===undefined || v==="") return "";
+    return `<div style="margin-bottom:10px"><b>${escapeHTML(label)}</b><div class="detail-answer">${escapeHTML(v)}</div></div>`;
+  }).join("");
+
+  const days=[1,2,3,4,5,6,7].map(d=>{
+    const done=s.data?.["day"+d]?"✅":"⬜";
+    const note=s.data?.["day"+d+"_note"]||"";
+    return `<div class="option">${done} <b>Day ${d}</b> — ${escapeHTML(note)}</div>`;
+  }).join("");
+
+  document.getElementById("detailBody").innerHTML=`
+    <div class="grid">
+      <div class="card"><b>Identitas</b><p>${escapeHTML(s.name)}<br>${escapeHTML(s.className)}<br>${escapeHTML(s.group||"Tanpa kelompok")}</p></div>
+      <div class="card"><b>Progress</b><div class="score">${studentPercent(s)}%</div><p>${studentCountDone(s)}/7 misi • Rata-rata asesmen: ${assessmentAverage(s)===null?"—":assessmentAverage(s)}</p></div>
+    </div>
+    <h3>✅ Status Misi</h3>
+    <div>${["m1","m2","m3","m4","m5","m6","m7"].map((m,i)=>`<span class="pill ${s.completed?.[m]?"done":""}" style="margin:3px">${s.completed?.[m]?"✅":"⬜"} Misi ${i+1}</span>`).join("")}</div>
+    <h3>🧠 Nilai Asesmen HOTS</h3>
+    <div class="assessment-scores">
+      ${(()=>{ensureAssessmentState(s);return ["p1","p2","p3"].map((p,i)=>`<div class="assessment-score-box"><span class="tiny">PERTEMUAN ${i+1}</span><b>${s.assessments[p].done?escapeHTML(s.assessments[p].score):"—"}</b></div>`).join("")})()}
+    </div>
+    <h3>📝 Jawaban Aktivitas</h3>
+    ${answers || '<div class="info">Belum ada jawaban aktivitas.</div>'}
+    <h3>🌱 Aksi 7 Hari</h3>${days}
+    <div class="info" style="margin-top:14px">Update terakhir: ${escapeHTML(s.updatedAt||"—")}</div>
+    <button class="btn danger" style="margin-top:14px" onclick="window.__deleteStudent('${escapeHTML(s.id)}')">🗑️ Hapus Data Siswa Ini</button>
+  `;
+  document.getElementById("detailModal").classList.add("show");
+};
+window.__deleteStudent=(id)=>{
+  if(!confirm("Hapus data siswa ini?")) return;
+  const db=getDB(); delete db[id]; setDB(db);
+  document.getElementById("detailModal").classList.remove("show");
+  renderTeacher(); showToast("Data siswa dihapus.");
+};
+
+document.getElementById("closeDetail").onclick=()=>document.getElementById("detailModal").classList.remove("show");
+document.getElementById("detailModal").addEventListener("click",e=>{
+  if(e.target.id==="detailModal") e.currentTarget.classList.remove("show");
+});
+document.getElementById("deleteAllStudentsBtn").onclick=()=>{
+  if(confirm("Yakin menghapus SEMUA data siswa di browser ini?")){
+    localStorage.removeItem(DB_KEY);
+    renderTeacher(); showToast("Semua data siswa dihapus.");
+  }
+};
+
+document.getElementById("exportBtn").onclick=()=>{
+  const all=allStudents();
+  const rows=[["Nama","Kelas","Kelompok","Progress","Misi Selesai","Asesmen P1","Asesmen P2","Asesmen P3","Rata-rata Asesmen","Update Terakhir"]];
+  all.forEach(s=>{
+    ensureAssessmentState(s);
+    rows.push([
+      s.name,s.className,s.group||"",studentPercent(s)+"%",studentCountDone(s)+"/7",
+      s.assessments.p1.done?s.assessments.p1.score:"",
+      s.assessments.p2.done?s.assessments.p2.score:"",
+      s.assessments.p3.done?s.assessments.p3.score:"",
+      assessmentAverage(s)===null?"":assessmentAverage(s),
+      s.updatedAt||""
+    ]);
+  });
+  const csv="\uFEFF"+rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
+  const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="hasil-siswa-sentriya.csv";
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+
+/* ==========================
+   TOMBOL UMUM
+   ========================== */
+document.getElementById("homeBtn").onclick=()=>{
+  if(currentStudent){showPage("home")}
+  else{showPage("mode")}
+};
+document.getElementById("fullscreenBtn").onclick=async()=>{
+  try{
+    if(!document.fullscreenElement) await document.documentElement.requestFullscreen();
+    else await document.exitFullscreen();
+  }catch(e){showToast("Fullscreen tidak tersedia.");}
+};
+document.getElementById("speakBtn").onclick=()=>{
+  if(!("speechSynthesis" in window)){showToast("Narasi tidak didukung.");return;}
+  speechSynthesis.cancel();
+  const active=document.querySelector(".page.active");
+  const text=(active?.innerText||"").replace(/\s+/g," ").trim().slice(0,3500);
+  const u=new SpeechSynthesisUtterance(text);u.lang="id-ID";u.rate=.92;
+  speechSynthesis.speak(u);
+};
+
+/* ==========================
+   MULAI
+   ========================== */
+if(currentStudentId && loadStudent(currentStudentId)){
+  document.getElementById("modeChip").textContent="🧑‍🎓 Mode Siswa";
+  showPage(currentStudent.currentPage || "home");
+}else{
+  showPage("mode");
+}
+})();
+</script>
+</body>
+</html>
